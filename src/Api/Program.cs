@@ -10,6 +10,7 @@ builder.Services.AddDbContext<TodoContext>(options => options.UseSqlite("Data So
 
 // bind repositories
 builder.Services.AddScoped<IBoardRepository, BoardRepository>();
+builder.Services.AddScoped<IBoardService, BoardService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

@@ -46,4 +46,28 @@ public class BoardRepositoryTests : DatabaseTests
     );
   }
 
+  [Fact]
+  public void GetAll_Should_Return_Columns()
+  {
+    // given
+    fixture.TodoContext.AddRange(
+      new Board
+      {
+        Name = "Test board",
+        Columns = new List<Column>() {
+          new Column { Name = "Test column" }
+        }
+      }
+    );
+    fixture.TodoContext.SaveChanges();
+    // when
+    var boards = repository.GetAll();
+    // then
+    Assert.Collection(boards,
+      item =>
+      {
+        Assert.Equal(item.Name, "Test board");
+        Assert.Collection(item.Columns, column => Assert.Equal(column.Name, "Test column"));
+      });
+  }
 }

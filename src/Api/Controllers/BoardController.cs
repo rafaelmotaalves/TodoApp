@@ -37,4 +37,18 @@ public class BoardController : ControllerBase
     return CreatedAtAction(nameof(Create), createBoardDto);
   }
 
+  [HttpPost("{id}/Columns")]
+  public ActionResult CreateColumn(int id, CreateColumnDto createColumnDto)
+  {
+    try
+    {
+      boardService.CreateColumn(id, createColumnDto.Name);
+      return CreatedAtAction(nameof(CreateColumn), createColumnDto);
+    }
+    catch (EntityNotFoundException)
+    {
+      return NotFound();
+    }
+  }
+
 }

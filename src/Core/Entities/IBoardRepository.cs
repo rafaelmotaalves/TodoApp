@@ -7,4 +7,6 @@ public interface IBoardRepository
   public Board? Get(int id);
 
   public void Create(Board board);
+
+  public void Update(Board board);
 }
