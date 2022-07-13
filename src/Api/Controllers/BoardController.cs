@@ -51,4 +51,32 @@ public class BoardController : ControllerBase
     }
   }
 
+  [HttpPost("{boardId}/Columns/{columnId}/Tasks")]
+  public ActionResult CreateTask(int boardId, int columnId, CreateTaskDto createTaskDto)
+  {
+    try
+    {
+      boardService.CreateTask(boardId, columnId, createTaskDto.Name);
+      return CreatedAtAction(nameof(CreateTask), createTaskDto);
+    }
+    catch (EntityNotFoundException)
+    {
+      return NotFound();
+    }
+  }
+
+  [HttpPut("{boardId}/Columns/{columnId}/Tasks/{taskId}")]
+  public ActionResult UpdateTask(int boardId, int columnId, int taskId, UpdateTaskDto updateTaskDto)
+  {
+    try
+    {
+      boardService.UpdateTask(boardId, columnId, updateTaskDto.newColumnId, taskId);
+      return NoContent();
+    }
+    catch (EntityNotFoundException)
+    {
+      return NotFound();
+    }
+  }
+
 }

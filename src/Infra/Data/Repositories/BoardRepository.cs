@@ -14,11 +14,11 @@ public class BoardRepository : IBoardRepository
   }
 
   public List<Board> GetAll() => todoContext.Boards
-    .Include(b => b.Columns)
     .ToList();
 
   public Board? Get(int id) => todoContext.Boards
     .Include(b => b.Columns)
+    .ThenInclude(c => c.Tasks)
     .FirstOrDefault(b => b.Id == id);
 
   public void Create(Board board)
