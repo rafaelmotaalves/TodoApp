@@ -15,21 +15,21 @@ public class BoardRepositoryTests : DatabaseTests
   }
 
   [Fact]
-  public void CreateBoard_Should_Add_The_Board_And_Save()
+  async public void CreateBoard_Should_Add_The_Board_And_Save()
   {
     // when
     var board = new Board { Name = "Board name" };
-    repository.Create(board);
+    await repository.Create(board);
 
     // then
-    var getBoard = repository.Get(1);
+    var getBoard = await repository.Get(1);
     Assert.NotNull(getBoard);
     if (getBoard is not null)
       Assert.Equal(getBoard.Name, board.Name);
   }
 
   [Fact]
-  public void GetAll_Should_Get_All_Boards()
+  async public void GetAll_Should_Get_All_Boards()
   {
     // given
     fixture.TodoContext.AddRange(
@@ -38,7 +38,7 @@ public class BoardRepositoryTests : DatabaseTests
     );
     fixture.TodoContext.SaveChanges();
     // when
-    var boards = repository.GetAll();
+    var boards = await repository.GetAll();
     // then
     Assert.Collection(boards,
       item => Assert.Equal(item.Name, "Test board 1"),
@@ -47,7 +47,7 @@ public class BoardRepositoryTests : DatabaseTests
   }
 
   [Fact]
-  public void GetAll_Should_Return_Columns()
+  async public void GetAll_Should_Return_Columns()
   {
     // given
     fixture.TodoContext.AddRange(
@@ -61,7 +61,7 @@ public class BoardRepositoryTests : DatabaseTests
     );
     fixture.TodoContext.SaveChanges();
     // when
-    var boards = repository.GetAll();
+    var boards = await repository.GetAll();
     // then
     Assert.Collection(boards,
       item =>

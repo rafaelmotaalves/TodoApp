@@ -4,11 +4,11 @@ namespace Core.Entities;
 public interface IBoardService
 {
 
-  public void CreateBoard(String name);
-  public void CreateColumn(int boardId, string name);
-  public void CreateTask(int boardId, int columnId, string name);
+  public System.Threading.Tasks.Task CreateBoard(String name);
+  public System.Threading.Tasks.Task CreateColumn(int boardId, string name);
+  public System.Threading.Tasks.Task CreateTask(int boardId, int columnId, string name);
 
-  public void UpdateTask(int boardId, int columnId, int newColumnId, int taskId);
+  public System.Threading.Tasks.Task UpdateTask(int boardId, int columnId, int newColumnId, int taskId);
 
 }
 
@@ -22,40 +22,40 @@ public class BoardService : IBoardService
     boardRepository = _boardRepository;
   }
 
-  public void CreateBoard(string name)
+  async public System.Threading.Tasks.Task CreateBoard(string name)
   {
     var board = new Board { Name = name };
 
-    boardRepository.Create(board);
+    await boardRepository.Create(board);
   }
 
-  public void CreateColumn(int boardId, string name)
+  public async System.Threading.Tasks.Task CreateColumn(int boardId, string name)
   {
-    var board = boardRepository.Get(boardId);
+    var board = await boardRepository.Get(boardId);
     if (board is null)
       throw new EntityNotFoundException();
     var column = new Column { Name = name };
     board.AddColumn(column);
-    boardRepository.Update(board);
+    await boardRepository.Update(board);
   }
 
-  public void CreateTask(int boardId, int columnId, string name)
+  public async System.Threading.Tasks.Task CreateTask(int boardId, int columnId, string name)
   {
-    var board = boardRepository.Get(boardId);
+    var board = await boardRepository.Get(boardId);
     if (board is null)
       throw new EntityNotFoundException();
     var task = new Task { Name = name };
     board.AddTask(columnId, task);
-    boardRepository.Update(board);
+    await boardRepository.Update(board);
   }
 
-  public void UpdateTask(int boardId, int columnId, int newColumnId, int taskId)
+  public async System.Threading.Tasks.Task UpdateTask(int boardId, int columnId, int newColumnId, int taskId)
   {
-    var board = boardRepository.Get(boardId);
+    var board = await boardRepository.Get(boardId);
     if (board is null)
       throw new EntityNotFoundException();
 
     board.MoveTask(columnId, newColumnId, taskId);
-    boardRepository.Update(board);
+    await boardRepository.Update(board);
   }
 }

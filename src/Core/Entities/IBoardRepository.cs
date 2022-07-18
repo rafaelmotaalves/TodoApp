@@ -2,11 +2,11 @@ namespace Core.Entities;
 
 public interface IBoardRepository
 {
-  public List<Board> GetAll();
+  public Task<List<Board>> GetAll();
 
-  public Board? Get(int id);
+  public Task<Board?> Get(int id);
 
-  public void Create(Board board);
+  public System.Threading.Tasks.Task Create(Board board);
 
-  public void Update(Board board);
+  public System.Threading.Tasks.Task Update(Board board);
 }

@@ -19,30 +19,30 @@ public class BoardController : ControllerBase
   }
 
   [HttpGet]
-  public ActionResult<List<Board>> GetAll() => boardRepository.GetAll();
+  async public System.Threading.Tasks.Task<ActionResult<List<Board>>> GetAll() => await boardRepository.GetAll();
 
   [HttpGet("{id}")]
-  public ActionResult<Board> Get(int id)
+  async public System.Threading.Tasks.Task<ActionResult<Board>> Get(int id)
   {
-    var board = boardRepository.Get(id);
+    var board = await boardRepository.Get(id);
     if (board is null)
       return NotFound();
     return board;
   }
 
   [HttpPost]
-  public ActionResult Create(CreateBoardDto createBoardDto)
+  async public System.Threading.Tasks.Task<ActionResult> Create(CreateBoardDto createBoardDto)
   {
-    boardService.CreateBoard(createBoardDto.Name);
+    await boardService.CreateBoard(createBoardDto.Name);
     return CreatedAtAction(nameof(Create), createBoardDto);
   }
 
   [HttpPost("{id}/Columns")]
-  public ActionResult CreateColumn(int id, CreateColumnDto createColumnDto)
+  async public Task<ActionResult> CreateColumn(int id, CreateColumnDto createColumnDto)
   {
     try
     {
-      boardService.CreateColumn(id, createColumnDto.Name);
+      await boardService.CreateColumn(id, createColumnDto.Name);
       return CreatedAtAction(nameof(CreateColumn), createColumnDto);
     }
     catch (EntityNotFoundException)
@@ -52,11 +52,11 @@ public class BoardController : ControllerBase
   }
 
   [HttpPost("{boardId}/Columns/{columnId}/Tasks")]
-  public ActionResult CreateTask(int boardId, int columnId, CreateTaskDto createTaskDto)
+  async public Task<ActionResult> CreateTask(int boardId, int columnId, CreateTaskDto createTaskDto)
   {
     try
     {
-      boardService.CreateTask(boardId, columnId, createTaskDto.Name);
+      await boardService.CreateTask(boardId, columnId, createTaskDto.Name);
       return CreatedAtAction(nameof(CreateTask), createTaskDto);
     }
     catch (EntityNotFoundException)
@@ -66,11 +66,11 @@ public class BoardController : ControllerBase
   }
 
   [HttpPut("{boardId}/Columns/{columnId}/Tasks/{taskId}")]
-  public ActionResult UpdateTask(int boardId, int columnId, int taskId, UpdateTaskDto updateTaskDto)
+  async public Task<ActionResult> UpdateTask(int boardId, int columnId, int taskId, UpdateTaskDto updateTaskDto)
   {
     try
     {
-      boardService.UpdateTask(boardId, columnId, updateTaskDto.newColumnId, taskId);
+      await boardService.UpdateTask(boardId, columnId, updateTaskDto.newColumnId, taskId);
       return NoContent();
     }
     catch (EntityNotFoundException)

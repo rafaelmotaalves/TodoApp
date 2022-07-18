@@ -24,7 +24,7 @@ public class BoardControllerTests
   }
 
   [Fact]
-  public void Get_Should_Return_A_Board_With_The_Passed_Id()
+  async public void Get_Should_Return_A_Board_With_The_Passed_Id()
   {
     // given
     int id = 100;
@@ -37,36 +37,36 @@ public class BoardControllerTests
         new Column { Name = "Test column"}
       }
     };
-    mockRepository.Setup(m => m.Get(100)).Returns(board);
+    mockRepository.Setup(m => m.Get(100))
+      .ReturnsAsync(board);
     // when
-    var res = controller.Get(100);
+    var res = await controller.Get(100);
     // then
     Assert.Equal(res.Value, board);
   }
 
   [Fact]
-  public void CreateColumn_Should_Return_Not_Found_If_Doesnt_Find_Board()
+  async public void CreateColumn_Should_Return_Not_Found_If_Doesnt_Find_Board()
   {
     // given
     int id = 100;
     mockService.Setup(m => m.CreateColumn(id, "Name")).Throws<EntityNotFoundException>();
     // when
-    var res = controller.CreateColumn(id, new CreateColumnDto { Name = "Name" });
+    var res = await controller.CreateColumn(id, new CreateColumnDto { Name = "Name" });
     // then
     Assert.IsType<NotFoundResult>(res);
   }
 
   [Fact]
-  public void CreateColumn_Should_Create_A_Column()
+  async public void CreateColumn_Should_Create_A_Column()
   {
     // given
     int id = 1;
     // when
-    var res = controller.CreateColumn(id, new CreateColumnDto { Name = "Name" });
+    var res = await controller.CreateColumn(id, new CreateColumnDto { Name = "Name" });
     // then
     Assert.IsType<CreatedAtActionResult>(res);
     mockService.Verify(s => s.CreateColumn(id, "Name"), Times.Once());
   }
-
 
 }
