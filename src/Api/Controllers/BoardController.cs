@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Core.Entities;
 using Api.Controllers.Dtos;
+using AutoMapper;
 
 namespace Api.Controllers;
 
@@ -11,23 +12,29 @@ public class BoardController : ControllerBase
 
   private IBoardRepository boardRepository;
   private IBoardService boardService;
+  private IMapper mapper;
 
-  public BoardController(IBoardRepository _boardRepository, IBoardService _boardService)
+  public BoardController(IBoardRepository _boardRepository, IBoardService _boardService, IMapper _mapper)
   {
     boardRepository = _boardRepository;
     boardService = _boardService;
+    mapper = _mapper;
   }
 
   [HttpGet]
-  async public Task<ActionResult<List<Board>>> GetAll() => await boardRepository.GetAll();
+  async public Task<ActionResult<List<BoardDto>>> GetAll() {
+    var boards = await boardRepository.GetAll();
+
+    return mapper.Map<List<Board>, List<BoardDto>>(boards);
+  }
 
   [HttpGet("{id}")]
-  async public Task<ActionResult<Board>> Get(int id)
+  async public Task<ActionResult<BoardWithColumnsDto>> Get(int id)
   {
     var board = await boardRepository.Get(id);
     if (board is null)
       return NotFound();
-    return board;
+    return mapper.Map<Board, BoardWithColumnsDto>(board);
   }
 
   [HttpPost]

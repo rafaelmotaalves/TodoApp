@@ -8,7 +8,10 @@ var builder = WebApplication.CreateBuilder(args);
 // Add DB context
 builder.Services.AddDbContext<TodoContext>(options => options.UseSqlite("Data Source=todo.db"));
 
-// bind repositories
+// Add AutoMapper
+builder.Services.AddAutoMapper(typeof(Program)); 
+
+// Bind repositories
 builder.Services.AddScoped<IBoardRepository, BoardRepository>();
 builder.Services.AddScoped<IBoardService, BoardService>();
 
