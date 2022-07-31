@@ -44,18 +44,18 @@ public class BoardService : IBoardService
     var board = await boardRepository.Get(boardId);
     if (board is null)
       throw new EntityNotFoundException();
-    var task = new Task { Name = name };
-    board.AddTask(columnId, task);
+    var card = new Card { Name = name };
+    board.AddCard(columnId, card);
     await boardRepository.Update(board);
   }
 
-  public async System.Threading.Tasks.Task UpdateTask(int boardId, int columnId, int newColumnId, int taskId)
+  public async System.Threading.Tasks.Task UpdateTask(int boardId, int columnId, int newColumnId, int cardId)
   {
     var board = await boardRepository.Get(boardId);
     if (board is null)
       throw new EntityNotFoundException();
 
-    board.MoveTask(columnId, newColumnId, taskId);
+    board.MoveCard(columnId, newColumnId, cardId);
     await boardRepository.Update(board);
   }
 }

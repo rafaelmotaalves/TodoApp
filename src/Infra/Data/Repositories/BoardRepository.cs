@@ -17,7 +17,7 @@ public class BoardRepository : C.IBoardRepository
 
   public Task<C.Board?> Get(int id) => todoContext.Boards
     .Include(b => b.Columns)
-    .ThenInclude(c => c.Tasks)
+    .ThenInclude(c => c.Cards)
     .FirstOrDefaultAsync(b => b.Id == id);
 
   async public Task Create(C.Board board)

@@ -16,16 +16,16 @@ public class Board
     Columns.Add(column);
   }
 
-  public void AddTask(int columnId, Task task)
+  public void AddCard(int columnId, Card card)
   {
     var column = Columns.FirstOrDefault(c => c.Id == columnId);
     if (column is null)
       throw new EntityNotFoundException();
 
-    column.AddTask(task);
+    column.AddCard(card);
   }
 
-  public void MoveTask(int columnId, int newColumnId, int taskId)
+  public void MoveCard(int columnId, int newColumnId, int cardId)
   {
     if (columnId == newColumnId)
       return;
@@ -34,15 +34,15 @@ public class Board
     if (oldColumn is null)
       throw new EntityNotFoundException();
 
-    var task = oldColumn.GetTask(taskId);
-    if (task is null)
+    var card = oldColumn.GetCard(cardId);
+    if (card is null)
       throw new EntityNotFoundException();
 
     var newColumn = Columns.FirstOrDefault(c => c.Id == newColumnId);
     if (newColumn is null)
       throw new EntityNotFoundException();
 
-    newColumn.AddTask(task);
+    newColumn.AddCard(card);
     // no need to remove from other column cause EF will handle that
     // but maybe we should remove it so that this part is EF independent
   }

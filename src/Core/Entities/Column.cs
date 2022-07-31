@@ -6,18 +6,18 @@ public class Column
 
   public string Name { get; set; }
 
-  public List<Task> Tasks { get; set; } = new List<Task>();
+  public List<Card> Cards { get; set; } = new List<Card>();
 
-  public void AddTask(Task task)
+  public void AddCard(Card card)
   {
-    if (Tasks.Any(t => t.Name.Equals(task.Name)))
+    if (Cards.Any(t => t.Name.Equals(card.Name)))
       return;
 
-    Tasks.Add(task);
+    Cards.Add(card);
   }
 
-  public Task? GetTask(int taskId)
+  public Card? GetCard(int cardId)
   {
-    return Tasks.FirstOrDefault(t => t.Id == taskId);
+    return Cards.FirstOrDefault(t => t.Id == cardId);
   }
 }
