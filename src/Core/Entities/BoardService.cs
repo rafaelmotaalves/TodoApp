@@ -4,11 +4,11 @@ namespace Core.Entities;
 public interface IBoardService
 {
 
-  public System.Threading.Tasks.Task CreateBoard(String name);
-  public System.Threading.Tasks.Task CreateColumn(int boardId, string name);
-  public System.Threading.Tasks.Task CreateTask(int boardId, int columnId, string name);
+  public Task CreateBoard(String name);
+  public Task CreateColumn(int boardId, string name);
+  public Task CreateTask(int boardId, int columnId, string name);
 
-  public System.Threading.Tasks.Task UpdateTask(int boardId, int columnId, int newColumnId, int taskId);
+  public Task UpdateTask(int boardId, int columnId, int newColumnId, int taskId);
 
 }
 
@@ -22,14 +22,14 @@ public class BoardService : IBoardService
     boardRepository = _boardRepository;
   }
 
-  async public System.Threading.Tasks.Task CreateBoard(string name)
+  async public Task CreateBoard(string name)
   {
     var board = new Board { Name = name };
 
     await boardRepository.Create(board);
   }
 
-  public async System.Threading.Tasks.Task CreateColumn(int boardId, string name)
+  public async Task CreateColumn(int boardId, string name)
   {
     var board = await boardRepository.Get(boardId);
     if (board is null)
@@ -39,7 +39,7 @@ public class BoardService : IBoardService
     await boardRepository.Update(board);
   }
 
-  public async System.Threading.Tasks.Task CreateTask(int boardId, int columnId, string name)
+  public async Task CreateTask(int boardId, int columnId, string name)
   {
     var board = await boardRepository.Get(boardId);
     if (board is null)
@@ -49,7 +49,7 @@ public class BoardService : IBoardService
     await boardRepository.Update(board);
   }
 
-  public async System.Threading.Tasks.Task UpdateTask(int boardId, int columnId, int newColumnId, int cardId)
+  public async Task UpdateTask(int boardId, int columnId, int newColumnId, int cardId)
   {
     var board = await boardRepository.Get(boardId);
     if (board is null)

@@ -6,7 +6,7 @@ public interface IBoardRepository
 
   public Task<Board?> Get(int id);
 
-  public System.Threading.Tasks.Task Create(Board board);
+  public Task Create(Board board);
 
-  public System.Threading.Tasks.Task Update(Board board);
+  public Task Update(Board board);
 }

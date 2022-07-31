@@ -1,9 +1,9 @@
-using C = Core.Entities;
+using Core.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infra.Data.Repositories;
 
-public class BoardRepository : C.IBoardRepository
+public class BoardRepository : IBoardRepository
 {
 
   private TodoContext todoContext;
@@ -13,20 +13,20 @@ public class BoardRepository : C.IBoardRepository
     todoContext = _todoContext;
   }
 
-  public Task<List<C.Board>> GetAll() => todoContext.Boards.ToListAsync();
+  public Task<List<Board>> GetAll() => todoContext.Boards.ToListAsync();
 
-  public Task<C.Board?> Get(int id) => todoContext.Boards
+  public Task<Board?> Get(int id) => todoContext.Boards
     .Include(b => b.Columns)
     .ThenInclude(c => c.Cards)
     .FirstOrDefaultAsync(b => b.Id == id);
 
-  async public Task Create(C.Board board)
+  async public Task Create(Board board)
   {
     await todoContext.AddAsync(board);
     await todoContext.SaveChangesAsync();
   }
 
-  public async Task Update(C.Board board)
+  public async Task Update(Board board)
   {
     todoContext.Update(board);
     await todoContext.SaveChangesAsync();

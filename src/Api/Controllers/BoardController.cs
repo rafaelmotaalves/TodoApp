@@ -19,10 +19,10 @@ public class BoardController : ControllerBase
   }
 
   [HttpGet]
-  async public System.Threading.Tasks.Task<ActionResult<List<Board>>> GetAll() => await boardRepository.GetAll();
+  async public Task<ActionResult<List<Board>>> GetAll() => await boardRepository.GetAll();
 
   [HttpGet("{id}")]
-  async public System.Threading.Tasks.Task<ActionResult<Board>> Get(int id)
+  async public Task<ActionResult<Board>> Get(int id)
   {
     var board = await boardRepository.Get(id);
     if (board is null)
@@ -31,7 +31,7 @@ public class BoardController : ControllerBase
   }
 
   [HttpPost]
-  async public System.Threading.Tasks.Task<ActionResult> Create(CreateBoardDto createBoardDto)
+  async public Task<ActionResult> Create(CreateBoardDto createBoardDto)
   {
     await boardService.CreateBoard(createBoardDto.Name);
     return CreatedAtAction(nameof(Create), createBoardDto);
