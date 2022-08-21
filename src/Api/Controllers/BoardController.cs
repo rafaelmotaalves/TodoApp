@@ -2,9 +2,11 @@ using Microsoft.AspNetCore.Mvc;
 using Core.Entities;
 using Api.Controllers.Dtos;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Api.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("[controller]")]
 public class BoardController : ControllerBase
