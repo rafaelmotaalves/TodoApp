@@ -4,7 +4,7 @@ namespace Core.Entities;
 public interface IBoardService
 {
 
-  public Task CreateBoard(string userId, string name);
+  public Task CreateUserBoard(string userId, string name);
   public Task CreateColumn(string userId, int boardId, string name);
   public Task CreateTask(string userId, int boardId, int columnId, string name);
 
@@ -22,48 +22,43 @@ public class BoardService : IBoardService
     boardRepository = _boardRepository;
   }
 
-  async public Task CreateBoard(string userId, string name)
+  async public Task CreateUserBoard(string userId, string name)
   {
-    var board = new Board { Name = name, UserId = userId };
+    var board = new UserBoard { Name = name, UserId = userId };
 
     await boardRepository.Create(board);
   }
 
-  public async Task CreateColumn(string userId, int boardId, string name)
+  public async Task CreateColumn(string ownerId, int boardId, string name)
   {
-    var board = await boardRepository.Get(userId, boardId);
+    var board = await boardRepository.Get(boardId);
     if (board is null)
       throw new EntityNotFoundException();
-    if (board.UserId != userId) 
-      throw new UnauthorizedException();
 
     var column = new Column { Name = name };
-    board.AddColumn(column);
+    board.AddColumn(ownerId, column);
     await boardRepository.Update(board);
   }
 
-  public async Task CreateTask(string userId, int boardId, int columnId, string name)
+  public async Task CreateTask(string ownerId, int boardId, int columnId, string name)
   {
-    var board = await boardRepository.Get(userId, boardId);
+    var board = await boardRepository.Get(boardId);
     if (board is null)
       throw new EntityNotFoundException();
-    if (board.UserId != userId) 
-      throw new UnauthorizedException();
     
     var card = new Card { Name = name };
-    board.AddCard(columnId, card);
+    board.AddCard(ownerId, columnId, card);
     await boardRepository.Update(board);
   }
 
-  public async Task UpdateTask(string userId, int boardId, int columnId, int newColumnId, int cardId)
+  public async Task UpdateTask(string ownerId, int boardId, int columnId, int newColumnId, int cardId)
   {
-    var board = await boardRepository.Get(userId, boardId);
+    var board = await boardRepository.Get(boardId);
     if (board is null)
       throw new EntityNotFoundException();
-    if (board.UserId != userId) 
-      throw new UnauthorizedException();
 
-    board.MoveCard(columnId, newColumnId, cardId);
+    board.MoveCard(ownerId, columnId, newColumnId, cardId);
     await boardRepository.Update(board);
   }
+
 }

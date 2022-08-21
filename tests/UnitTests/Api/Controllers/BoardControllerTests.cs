@@ -32,7 +32,7 @@ public class BoardControllerTests
   {
     // given
     int id = 100;
-    var board = new Board
+    var board = new UserBoard
     {
       Id = id,
       Name = "Test board",

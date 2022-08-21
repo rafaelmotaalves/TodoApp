@@ -20,7 +20,7 @@ public class BoardServiceTests
   {
     string name = "Board name";
     string userId = "user_id";
-    await service.CreateBoard(userId, name);
+    await service.CreateUserBoard(userId, name);
 
     mock.Verify(r => r.Create(It.Is<Board>(b => b.Name == name)), Times.Once());
   }

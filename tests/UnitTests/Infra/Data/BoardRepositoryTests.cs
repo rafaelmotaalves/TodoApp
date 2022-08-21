@@ -18,7 +18,7 @@ public class BoardRepositoryTests : DatabaseTests
   async public void CreateBoard_Should_Add_The_Board_And_Save()
   {
     // when
-    var board = new Board { Name = "Board name", UserId = "user_id" };
+    var board = new UserBoard { Name = "Board name", UserId = "user_id" };
     await repository.Create(board);
 
     // then
@@ -33,8 +33,8 @@ public class BoardRepositoryTests : DatabaseTests
   {
     // given
     fixture.TodoContext.AddRange(
-      new Board { Name = "Test board 1",  UserId = "user_id" },
-      new Board { Name = "Test board 2",  UserId = "user_id" }
+      new UserBoard { Name = "Test board 1",  UserId = "user_id" },
+      new UserBoard { Name = "Test board 2",  UserId = "user_id" }
     );
     fixture.TodoContext.SaveChanges();
     // when
@@ -51,7 +51,7 @@ public class BoardRepositoryTests : DatabaseTests
   {
     // given
     fixture.TodoContext.AddRange(
-      new Board
+      new UserBoard
       {
         Name = "Test board",
         Columns = new List<Column>() {

@@ -1,6 +1,6 @@
 namespace Core.Entities;
 
-public class Board
+abstract public class Board
 {
 
   public int Id { get; set; }
@@ -8,20 +8,25 @@ public class Board
 
   public List<Column> Columns { get; set; } = new List<Column>();
 
-  public String UserId { get; set; }
 
-  public User User { get; set; }
+  public abstract bool IsOwner(string ownerId);
 
-  public void AddColumn(Column column)
+  public void AddColumn(string ownerId, Column column)
   {
+    if (!IsOwner(ownerId))
+      throw new UnauthorizedException();
+
     if (Columns.Any(c => c.Name.Equals(column.Name)))
       return;
 
     Columns.Add(column);
   }
 
-  public void AddCard(int columnId, Card card)
+  public void AddCard(string ownerId, int columnId, Card card)
   {
+    if (!IsOwner(ownerId))
+      throw new UnauthorizedException();
+    
     var column = Columns.FirstOrDefault(c => c.Id == columnId);
     if (column is null)
       throw new EntityNotFoundException();
@@ -29,8 +34,11 @@ public class Board
     column.AddCard(card);
   }
 
-  public void MoveCard(int columnId, int newColumnId, int cardId)
+  public void MoveCard(string ownerId, int columnId, int newColumnId, int cardId)
   {
+    if (!IsOwner(ownerId))
+      throw new UnauthorizedException();
+    
     if (columnId == newColumnId)
       return;
 

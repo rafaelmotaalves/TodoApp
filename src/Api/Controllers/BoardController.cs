@@ -3,8 +3,6 @@ using Core.Entities;
 using Api.Controllers.Dtos;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-
 
 namespace Api.Controllers;
 
@@ -30,16 +28,16 @@ public class BoardController : ControllerBase
   async public Task<ActionResult<List<BoardDto>>> GetAll()
   {
     var userId = GetUserId();
-    var boards = await boardRepository.GetAll(userId);
+    var boards = await boardRepository.GetAllUser(userId);
 
-    return mapper.Map<List<Board>, List<BoardDto>>(boards);
+    return mapper.Map<List<UserBoard>, List<BoardDto>>(boards);
   }
 
   [HttpGet("{id}")]
   async public Task<ActionResult<BoardWithColumnsDto>> Get(int id)
   {
     var userId = GetUserId();
-    var board = await boardRepository.Get(userId, id);
+    var board = await boardRepository.GetUser(userId, id);
     if (board is null)
       return NotFound();
     return mapper.Map<Board, BoardWithColumnsDto>(board);
@@ -49,7 +47,7 @@ public class BoardController : ControllerBase
   async public Task<ActionResult> Create(CreateBoardDto createBoardDto)
   {
     var userId = GetUserId();
-    await boardService.CreateBoard(userId, createBoardDto.Name);
+    await boardService.CreateUserBoard(userId, createBoardDto.Name);
     return CreatedAtAction(nameof(Create), createBoardDto);
   }
 
