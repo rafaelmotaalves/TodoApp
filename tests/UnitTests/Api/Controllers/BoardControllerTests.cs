@@ -42,7 +42,7 @@ public class BoardControllerTests
       },
       UserId = "user_id"
     };
-    mockRepository.Setup(m => m.Get("user_id", 100))
+    mockRepository.Setup(m => m.GetUser("user_id", 100))
       .ReturnsAsync(board);
     // when
     var res = await controller.Get(100);

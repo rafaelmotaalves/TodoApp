@@ -22,7 +22,7 @@ public class BoardRepositoryTests : DatabaseTests
     await repository.Create(board);
 
     // then
-    var getBoard = await repository.Get("user_id", 1);
+    var getBoard = await repository.GetUser("user_id", 1);
     Assert.NotNull(getBoard);
     if (getBoard is not null)
       Assert.Equal(getBoard.Name, board.Name);
@@ -38,7 +38,7 @@ public class BoardRepositoryTests : DatabaseTests
     );
     fixture.TodoContext.SaveChanges();
     // when
-    var boards = await repository.GetAll("user_id");
+    var boards = await repository.GetAllUser("user_id");
     // then
     Assert.Collection(boards,
       item => Assert.Equal(item.Name, "Test board 1"),
@@ -62,7 +62,7 @@ public class BoardRepositoryTests : DatabaseTests
     );
     fixture.TodoContext.SaveChanges();
     // when
-    var boards = await repository.GetAll("user_id");
+    var boards = await repository.GetAllUser("user_id");
     // then
     Assert.Collection(boards,
       item =>
