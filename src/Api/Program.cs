@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Security.Claims;
 using System.Text;
 
 
@@ -16,42 +17,42 @@ var configuration = builder.Configuration;
 builder.Services.AddDbContext<TodoContext>(options => options.UseSqlite("Data Source=todo.db"));
 
 // For Identity
-builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+builder.Services.AddIdentity<User, IdentityRole>()
     .AddEntityFrameworkStores<TodoContext>()
     .AddDefaultTokenProviders();
 
 builder.Services.Configure<IdentityOptions>(options =>
 {
-    options.Password.RequireDigit = false;
-    options.Password.RequiredLength = 1;
-    options.Password.RequireLowercase = false;
-    options.Password.RequireNonAlphanumeric = false;
-    options.Password.RequireUppercase = false;
+  options.Password.RequireDigit = false;
+  options.Password.RequiredLength = 1;
+  options.Password.RequireLowercase = false;
+  options.Password.RequireNonAlphanumeric = false;
+  options.Password.RequireUppercase = false;
 });
 
 // Adding Authentication
 builder.Services.AddAuthentication(options =>
 {
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+  options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+  options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+  options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
 })
 .AddJwtBearer(options =>
 {
-    options.SaveToken = true;
-    options.RequireHttpsMetadata = false;
-    options.TokenValidationParameters = new TokenValidationParameters()
-    {
-        ValidateIssuer = false,
-        ValidateAudience = false,
-        ValidAudience = configuration["JWT:ValidAudience"],
-        ValidIssuer = configuration["JWT:ValidIssuer"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]))
-    };
+  options.SaveToken = true;
+  options.RequireHttpsMetadata = false;
+  options.TokenValidationParameters = new TokenValidationParameters()
+  {
+    ValidateIssuer = false,
+    ValidateAudience = false,
+    ValidAudience = configuration["JWT:ValidAudience"],
+    ValidIssuer = configuration["JWT:ValidIssuer"],
+    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]))
+  };
 });
 
 // Add AutoMapper
-builder.Services.AddAutoMapper(typeof(Program)); 
+builder.Services.AddAutoMapper(typeof(Program));
 
 // Bind repositories
 builder.Services.AddScoped<IBoardRepository, BoardRepository>();
@@ -64,24 +65,25 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddSwaggerGen(c =>
 {
-  c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme {
-    In = ParameterLocation.Header, 
+  c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+  {
+    In = ParameterLocation.Header,
     Description = "Please insert JWT with Bearer into field",
     Name = "Authorization",
-    Type = SecuritySchemeType.ApiKey 
+    Type = SecuritySchemeType.ApiKey
   });
   c.AddSecurityRequirement(new OpenApiSecurityRequirement {
-   { 
-     new OpenApiSecurityScheme 
-     { 
-       Reference = new OpenApiReference 
-       { 
+   {
+     new OpenApiSecurityScheme
+     {
+       Reference = new OpenApiReference
+       {
          Type = ReferenceType.SecurityScheme,
-         Id = "Bearer" 
-       } 
+         Id = "Bearer"
+       }
       },
-      new string[] { } 
-    } 
+      new string[] { }
+    }
   });
 });
 
@@ -98,6 +100,14 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.Use(async (context, next) =>
+{
+  context.Items["UserId"] = context.User.FindFirstValue(ClaimTypes.NameIdentifier);
+  // Do work that doesn't write to the Response.
+  await next.Invoke();
+  // Do logging or other work that doesn't write to the Response.
+});
 
 app.MapControllers();
 

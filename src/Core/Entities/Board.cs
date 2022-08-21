@@ -8,6 +8,10 @@ public class Board
 
   public List<Column> Columns { get; set; } = new List<Column>();
 
+  public String UserId { get; set; }
+
+  public User User { get; set; }
+
   public void AddColumn(Column column)
   {
     if (Columns.Any(c => c.Name.Equals(column.Name)))

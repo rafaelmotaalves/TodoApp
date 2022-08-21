@@ -19,7 +19,8 @@ public class BoardServiceTests
   async public void CreateBoard_Should_Create_a_Board_With_The_Passed_Name()
   {
     string name = "Board name";
-    await service.CreateBoard(name);
+    string userId = "user_id";
+    await service.CreateBoard(userId, name);
 
     mock.Verify(r => r.Create(It.Is<Board>(b => b.Name == name)), Times.Once());
   }

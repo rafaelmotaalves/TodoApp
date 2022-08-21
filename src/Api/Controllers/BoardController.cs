@@ -3,6 +3,8 @@ using Core.Entities;
 using Api.Controllers.Dtos;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+
 
 namespace Api.Controllers;
 
@@ -16,6 +18,7 @@ public class BoardController : ControllerBase
   private IBoardService boardService;
   private IMapper mapper;
 
+
   public BoardController(IBoardRepository _boardRepository, IBoardService _boardService, IMapper _mapper)
   {
     boardRepository = _boardRepository;
@@ -24,8 +27,10 @@ public class BoardController : ControllerBase
   }
 
   [HttpGet]
-  async public Task<ActionResult<List<BoardDto>>> GetAll() {
-    var boards = await boardRepository.GetAll();
+  async public Task<ActionResult<List<BoardDto>>> GetAll()
+  {
+    var userId = GetUserId();
+    var boards = await boardRepository.GetAll(userId);
 
     return mapper.Map<List<Board>, List<BoardDto>>(boards);
   }
@@ -33,7 +38,8 @@ public class BoardController : ControllerBase
   [HttpGet("{id}")]
   async public Task<ActionResult<BoardWithColumnsDto>> Get(int id)
   {
-    var board = await boardRepository.Get(id);
+    var userId = GetUserId();
+    var board = await boardRepository.Get(userId, id);
     if (board is null)
       return NotFound();
     return mapper.Map<Board, BoardWithColumnsDto>(board);
@@ -42,7 +48,8 @@ public class BoardController : ControllerBase
   [HttpPost]
   async public Task<ActionResult> Create(CreateBoardDto createBoardDto)
   {
-    await boardService.CreateBoard(createBoardDto.Name);
+    var userId = GetUserId();
+    await boardService.CreateBoard(userId, createBoardDto.Name);
     return CreatedAtAction(nameof(Create), createBoardDto);
   }
 
@@ -51,12 +58,17 @@ public class BoardController : ControllerBase
   {
     try
     {
-      await boardService.CreateColumn(id, createColumnDto.Name);
+      var userId = GetUserId();
+      await boardService.CreateColumn(userId, id, createColumnDto.Name);
       return CreatedAtAction(nameof(CreateColumn), createColumnDto);
     }
     catch (EntityNotFoundException)
     {
       return NotFound();
+    }
+    catch (UnauthorizedException)
+    {
+      return Unauthorized();
     }
   }
 
@@ -65,12 +77,17 @@ public class BoardController : ControllerBase
   {
     try
     {
-      await boardService.CreateTask(boardId, columnId, createTaskDto.Name);
+      var userId = GetUserId();
+      await boardService.CreateTask(userId, boardId, columnId, createTaskDto.Name);
       return CreatedAtAction(nameof(CreateTask), createTaskDto);
     }
     catch (EntityNotFoundException)
     {
       return NotFound();
+    }
+    catch (UnauthorizedException)
+    {
+      return Unauthorized();
     }
   }
 
@@ -79,13 +96,26 @@ public class BoardController : ControllerBase
   {
     try
     {
-      await boardService.UpdateTask(boardId, columnId, updateTaskDto.newColumnId, taskId);
+      var userId = GetUserId();
+      await boardService.UpdateTask(userId, boardId, columnId, updateTaskDto.newColumnId, taskId);
       return NoContent();
     }
     catch (EntityNotFoundException)
     {
       return NotFound();
     }
+    catch (UnauthorizedException)
+    {
+      return Unauthorized();
+    }
   }
 
+  private string GetUserId()
+  {
+    var userId = HttpContext.Items["UserId"];
+    if (userId is null)
+      throw new Exception();
+
+    return (string)userId;
+  }
 }

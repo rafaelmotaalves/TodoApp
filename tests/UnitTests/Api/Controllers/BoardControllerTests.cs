@@ -1,7 +1,6 @@
 using Api.Controllers;
 using Core.Entities;
 using Api.Controllers.Dtos;
-using Api.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 using Moq;
@@ -40,9 +39,10 @@ public class BoardControllerTests
       Columns = new List<Column>()
       {
         new Column { Name = "Test column"}
-      }
+      },
+      UserId = "user_id"
     };
-    mockRepository.Setup(m => m.Get(100))
+    mockRepository.Setup(m => m.Get("user_id", 100))
       .ReturnsAsync(board);
     // when
     var res = await controller.Get(100);
@@ -55,7 +55,7 @@ public class BoardControllerTests
   {
     // given
     int id = 100;
-    mockService.Setup(m => m.CreateColumn(id, "Name")).Throws<EntityNotFoundException>();
+    mockService.Setup(m => m.CreateColumn("user_id", id, "Name")).Throws<EntityNotFoundException>();
     // when
     var res = await controller.CreateColumn(id, new CreateColumnDto { Name = "Name" });
     // then
@@ -71,7 +71,7 @@ public class BoardControllerTests
     var res = await controller.CreateColumn(id, new CreateColumnDto { Name = "Name" });
     // then
     Assert.IsType<CreatedAtActionResult>(res);
-    mockService.Verify(s => s.CreateColumn(id, "Name"), Times.Once());
+    mockService.Verify(s => s.CreateColumn("user_id", id, "Name"), Times.Once());
   }
 
 }

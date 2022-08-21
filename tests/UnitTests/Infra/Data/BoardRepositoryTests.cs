@@ -18,11 +18,11 @@ public class BoardRepositoryTests : DatabaseTests
   async public void CreateBoard_Should_Add_The_Board_And_Save()
   {
     // when
-    var board = new Board { Name = "Board name" };
+    var board = new Board { Name = "Board name", UserId = "user_id" };
     await repository.Create(board);
 
     // then
-    var getBoard = await repository.Get(1);
+    var getBoard = await repository.Get("user_id", 1);
     Assert.NotNull(getBoard);
     if (getBoard is not null)
       Assert.Equal(getBoard.Name, board.Name);
@@ -33,12 +33,12 @@ public class BoardRepositoryTests : DatabaseTests
   {
     // given
     fixture.TodoContext.AddRange(
-      new Board { Name = "Test board 1" },
-      new Board { Name = "Test board 2" }
+      new Board { Name = "Test board 1",  UserId = "user_id" },
+      new Board { Name = "Test board 2",  UserId = "user_id" }
     );
     fixture.TodoContext.SaveChanges();
     // when
-    var boards = await repository.GetAll();
+    var boards = await repository.GetAll("user_id");
     // then
     Assert.Collection(boards,
       item => Assert.Equal(item.Name, "Test board 1"),
@@ -56,12 +56,13 @@ public class BoardRepositoryTests : DatabaseTests
         Name = "Test board",
         Columns = new List<Column>() {
           new Column { Name = "Test column" }
-        }
+        },
+        UserId = "user_id"
       }
     );
     fixture.TodoContext.SaveChanges();
     // when
-    var boards = await repository.GetAll();
+    var boards = await repository.GetAll("user_id");
     // then
     Assert.Collection(boards,
       item =>

@@ -1,4 +1,5 @@
 using Api.Controllers.Dtos;
+using Core.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -9,15 +10,15 @@ using System.Text;
 namespace Api.Controllers
 {
   [ApiController]
-  [Route("api/[controller]")]
+  [Route("[controller]")]
   public class AuthenticationController : ControllerBase
   {
-    private readonly UserManager<IdentityUser> _userManager;
+    private readonly UserManager<User> _userManager;
     private readonly RoleManager<IdentityRole> _roleManager;
     private readonly IConfiguration _configuration;
 
     public AuthenticationController(
-        UserManager<IdentityUser> userManager,
+        UserManager<User> userManager,
         RoleManager<IdentityRole> roleManager,
         IConfiguration configuration
     )
@@ -38,6 +39,7 @@ namespace Api.Controllers
       var userRoles = await _userManager.GetRolesAsync(user);
       var authClaims = new List<Claim> {
             new Claim(ClaimTypes.Name, user.UserName),
+            new Claim(ClaimTypes.NameIdentifier, user.Id),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
 
@@ -66,7 +68,7 @@ namespace Api.Controllers
             message = "User name already exists"
         });
 
-      IdentityUser user = new()
+      User user = new()
       {
         SecurityStamp = Guid.NewGuid().ToString(),
         UserName = authenticationDto.Name
