@@ -9,6 +9,7 @@ namespace Api.Controllers
         public AutoMapperProfile() {
             CreateMap<Board, BoardDto>(); 
             CreateMap<UserBoard, BoardDto>();
+            CreateMap<TeamBoard, BoardDto>();
             CreateMap<Board, BoardWithColumnsDto>();
             CreateMap<Column, ColumnDto>();
             CreateMap<Card, CardDto>();

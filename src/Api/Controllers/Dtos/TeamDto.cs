@@ -14,5 +14,7 @@ namespace Api.Controllers.Dtos
         public List<UserDto> Members { get; set; }
 
         public UserDto Owner { get; set; }
+
+        public List<BoardDto> Boards { get; set; }
     }
 }

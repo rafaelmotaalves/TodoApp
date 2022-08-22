@@ -66,6 +66,22 @@ namespace Api.Controllers
       return actionResult;
     }
 
+    [HttpPost("{teamId}/boards")]
+    async public Task<ActionResult> AddBoard(string teamId, CreateBoardDto createBoardDto) {
+      var userId = GetUserId();
+
+      ActionResult actionResult;
+      try {
+        await _teamService.AddBoard(teamId, userId, createBoardDto.Name);
+        actionResult = NoContent();
+      } catch (EntityNotFoundException) {
+        actionResult = NotFound();
+      } catch (UnauthorizedException) {
+        actionResult = Unauthorized();
+      }
+      return actionResult;
+    }
+
     private string GetUserId()
     {
       var userId = HttpContext.Items["UserId"];
