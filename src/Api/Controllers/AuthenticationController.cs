@@ -6,6 +6,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.AspNetCore.Authorization;
+using AutoMapper;
 
 namespace Api.Controllers
 {
@@ -17,15 +19,19 @@ namespace Api.Controllers
     private readonly RoleManager<IdentityRole> _roleManager;
     private readonly IConfiguration _configuration;
 
+    private readonly IMapper _mapper;
+
     public AuthenticationController(
         UserManager<User> userManager,
         RoleManager<IdentityRole> roleManager,
-        IConfiguration configuration
+        IConfiguration configuration,
+        IMapper mapper
     )
     {
       _userManager = userManager;
       _roleManager = roleManager;
       _configuration = configuration;
+      _mapper = mapper;
     }
 
     [HttpPost]
@@ -64,8 +70,9 @@ namespace Api.Controllers
     {
       var userExists = await _userManager.FindByNameAsync(authenticationDto.Name);
       if (userExists != null)
-        return BadRequest(new {
-            message = "User name already exists"
+        return BadRequest(new
+        {
+          message = "User name already exists"
         });
 
       User user = new()
@@ -95,5 +102,15 @@ namespace Api.Controllers
       return token;
     }
 
+    [Authorize]
+    [HttpGet]
+    [Route("me")]
+    public async Task<UserDto> GetMe()
+    {
+      var user = await _userManager.GetUserAsync(HttpContext.User);
+
+      return _mapper.Map<User, UserDto>(user);
+    }
   }
+
 }

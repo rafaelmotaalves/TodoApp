@@ -12,6 +12,8 @@ namespace Api.Controllers
             CreateMap<Board, BoardWithColumnsDto>();
             CreateMap<Column, ColumnDto>();
             CreateMap<Card, CardDto>();
+            CreateMap<Team, TeamDto>();
+            CreateMap<User, UserDto>();
         }
     }
 }
