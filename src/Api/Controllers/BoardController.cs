@@ -17,20 +17,24 @@ public class BoardController : ControllerBase
   private IBoardRepository boardRepository;
   private IBoardService boardService;
   private IMapper mapper;
+  private IUserBoardRepository userBoardRepository;
 
+  private IUserBoardService userBoardService;
 
-  public BoardController(IBoardRepository _boardRepository, IBoardService _boardService, IMapper _mapper)
+  public BoardController(IBoardRepository _boardRepository, IBoardService _boardService, IMapper _mapper, IUserBoardRepository _userBoardRepository, IUserBoardService _userBoardService)
   {
     boardRepository = _boardRepository;
     boardService = _boardService;
     mapper = _mapper;
+    userBoardRepository = _userBoardRepository;
+    userBoardService = _userBoardService;
   }
 
   [HttpGet]
   async public Task<ActionResult<List<BoardDto>>> GetAll()
   {
     var userId = GetUserId();
-    var boards = await boardRepository.GetAllUser(userId);
+    var boards = await userBoardRepository.GetAll(userId);
 
     return mapper.Map<List<UserBoard>, List<BoardDto>>(boards);
   }
@@ -39,11 +43,14 @@ public class BoardController : ControllerBase
   async public Task<ActionResult<BoardWithColumnsDto>> Get(int id)
   {
     var userId = GetUserId();
-    try {
+    try
+    {
       var board = await boardService.GetBoard(userId, id);
 
       return mapper.Map<Board, BoardWithColumnsDto>(board);
-    } catch (EntityNotFoundException) {
+    }
+    catch (EntityNotFoundException)
+    {
       return NotFound();
     }
   }
@@ -52,7 +59,7 @@ public class BoardController : ControllerBase
   async public Task<ActionResult> Create(CreateBoardDto createBoardDto)
   {
     var userId = GetUserId();
-    await boardService.CreateUserBoard(userId, createBoardDto.Name);
+    await userBoardService.Create(userId, createBoardDto.Name);
     return CreatedAtAction(nameof(Create), createBoardDto);
   }
 

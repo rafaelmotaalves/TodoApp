@@ -14,19 +14,29 @@ public class BoardControllerTests
 {
 
   private BoardController controller;
-  private Mock<IBoardRepository> mockRepository;
-  private Mock<IBoardService> mockService;
+  private Mock<IBoardRepository> mockBoardRepository;
+  private Mock<IBoardService> mockBoardService;
+  private Mock<IUserBoardRepository> mockUserBoardRepository;
+  private Mock<IUserBoardService> mockUserBoardService;
 
   public BoardControllerTests()
   {
-    mockRepository = new Mock<IBoardRepository>();
-    mockService = new Mock<IBoardService>();
+    mockBoardRepository = new Mock<IBoardRepository>();
+    mockBoardService = new Mock<IBoardService>();
+    mockUserBoardRepository = new Mock<IUserBoardRepository>();
+    mockUserBoardService = new Mock<IUserBoardService>();
 
     var configuration = new MapperConfiguration(cfg => {
       cfg.AddProfile<AutoMapperProfile>();
     });
 
-    controller = new BoardController(mockRepository.Object, mockService.Object, configuration.CreateMapper());
+    controller = new BoardController(
+      mockBoardRepository.Object,
+      mockBoardService.Object,
+      configuration.CreateMapper(),
+      mockUserBoardRepository.Object,
+      mockUserBoardService.Object
+    );
   }
 
   [Fact]
@@ -44,7 +54,7 @@ public class BoardControllerTests
       },
       UserId = "user_id"
     };
-    mockRepository.Setup(m => m.Get(100))
+    mockBoardRepository.Setup(m => m.Get(100))
       .ReturnsAsync(board);
     // when
     var res = await controller.Get(100);
@@ -57,7 +67,7 @@ public class BoardControllerTests
   {
     // given
     int id = 100;
-    mockService.Setup(m => m.CreateColumn("user_id", id, "Name")).Throws<EntityNotFoundException>();
+    mockBoardService.Setup(m => m.CreateColumn("user_id", id, "Name")).Throws<EntityNotFoundException>();
     // when
     var res = await controller.CreateColumn(id, new CreateColumnDto { Name = "Name" });
     // then
@@ -73,7 +83,7 @@ public class BoardControllerTests
     var res = await controller.CreateColumn(id, new CreateColumnDto { Name = "Name" });
     // then
     Assert.IsType<CreatedAtActionResult>(res);
-    mockService.Verify(s => s.CreateColumn("user_id", id, "Name"), Times.Once());
+    mockBoardService.Verify(s => s.CreateColumn("user_id", id, "Name"), Times.Once());
   }
 
 }

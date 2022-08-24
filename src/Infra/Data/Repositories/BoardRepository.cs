@@ -1,5 +1,4 @@
 using Core.Board;
-using Core.User;
 using Core.Team;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,8 +13,6 @@ public class BoardRepository : IBoardRepository
   {
     todoContext = _todoContext;
   }
-
-  public Task<List<UserBoard>> GetAllUser(string userId) => todoContext.UserBoards.Where(b => b.UserId == userId).ToListAsync();
 
   async public Task<Board?> Get(int id)
   {

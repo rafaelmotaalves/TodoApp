@@ -6,7 +6,6 @@ using Core.User;
 public interface IBoardService
 {
 
-  public Task CreateUserBoard(string userId, string name);
   public Task CreateColumn(string userId, int boardId, string name);
   public Task CreateTask(string userId, int boardId, int columnId, string name);
   public Task UpdateTask(string userId, int boardId, int columnId, int newColumnId, int taskId);
@@ -25,13 +24,6 @@ public class BoardService : IBoardService
     boardRepository = _boardRepository;
   }
 
-
-  async public Task CreateUserBoard(string userId, string name)
-  {
-    var board = new UserBoard { Name = name, UserId = userId };
-
-    await boardRepository.Create(board);
-  }
 
   public async Task CreateColumn(string ownerId, int boardId, string name)
   {

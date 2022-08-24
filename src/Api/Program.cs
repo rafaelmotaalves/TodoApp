@@ -62,6 +62,8 @@ builder.Services.AddScoped<IBoardService, BoardService>();
 builder.Services.AddScoped<ITeamRepository, TeamRepository>();
 builder.Services.AddScoped<ITeamService, TeamService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserBoardService, UserBoardService>();
+builder.Services.AddScoped<IUserBoardRepository, UserBoardRepository>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
