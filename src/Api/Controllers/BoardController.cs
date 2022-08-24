@@ -37,10 +37,13 @@ public class BoardController : ControllerBase
   async public Task<ActionResult<BoardWithColumnsDto>> Get(int id)
   {
     var userId = GetUserId();
-    var board = await boardRepository.GetUser(userId, id);
-    if (board is null)
+    try {
+      var board = await boardService.GetBoard(userId, id);
+
+      return mapper.Map<Board, BoardWithColumnsDto>(board);
+    } catch (EntityNotFoundException) {
       return NotFound();
-    return mapper.Map<Board, BoardWithColumnsDto>(board);
+    }
   }
 
   [HttpPost]

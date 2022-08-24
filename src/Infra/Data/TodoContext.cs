@@ -17,12 +17,4 @@ public class TodoContext :  IdentityDbContext<User>
     Database.EnsureCreated();
   }
 
-
-  protected override void OnModelCreating(ModelBuilder builder)
-  {
-    base.OnModelCreating(builder);
-  }
-
-  // protected override void OnConfiguring(DbContextOptionsBuilder options)
-  //   => options.UseSqlite($"Data Source=todo.db");
 }

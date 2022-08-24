@@ -27,7 +27,7 @@ namespace Core.Entities
       if (OwnerId != userId)
         throw new UnauthorizedException();
 
-      if (Members.Any(u => u.UserName == user.UserName))
+      if (IsMember(user.Id))
         return;
 
       Members.Add(user);

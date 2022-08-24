@@ -5,8 +5,6 @@ namespace Core.Entities
     public string TeamId { get; set; }
     public Team Team { get; set; }
 
-    public override bool IsOwner(string userId) {
-      return Team.OwnerId == userId || Team.Members.Any(u => u.Id == userId);
-    }
+    public override bool IsOwner(string userId) => Team != null && Team.IsMember(userId);
   }
 }

@@ -7,8 +7,9 @@ public interface IBoardService
   public Task CreateUserBoard(string userId, string name);
   public Task CreateColumn(string userId, int boardId, string name);
   public Task CreateTask(string userId, int boardId, int columnId, string name);
-
   public Task UpdateTask(string userId, int boardId, int columnId, int newColumnId, int taskId);
+
+  public Task<Board> GetBoard(string userId, int boardId);
 
 }
 
@@ -21,6 +22,7 @@ public class BoardService : IBoardService
   {
     boardRepository = _boardRepository;
   }
+
 
   async public Task CreateUserBoard(string userId, string name)
   {
@@ -61,4 +63,11 @@ public class BoardService : IBoardService
     await boardRepository.Update(board);
   }
 
+  async public Task<Board> GetBoard(string userId, int boardId)
+  {
+    var board = await boardRepository.Get(boardId);
+    if (board is null || !board.IsOwner(userId))
+      throw new EntityNotFoundException();
+    return board;
+  }
 }

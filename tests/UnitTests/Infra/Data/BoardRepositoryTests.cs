@@ -22,7 +22,7 @@ public class BoardRepositoryTests : DatabaseTests
     await repository.Create(board);
 
     // then
-    var getBoard = await repository.GetUser("user_id", 1);
+    var getBoard = await repository.Get(1);
     Assert.NotNull(getBoard);
     if (getBoard is not null)
       Assert.Equal(getBoard.Name, board.Name);

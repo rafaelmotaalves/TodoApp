@@ -15,15 +15,21 @@ public class BoardRepository : IBoardRepository
 
   public Task<List<UserBoard>> GetAllUser(string userId) => todoContext.UserBoards.Where(b => b.UserId == userId).ToListAsync();
 
-  public Task<UserBoard?> GetUser(string userId, int id) => todoContext.UserBoards
-    .Include(b => b.Columns)
-    .ThenInclude(c => c.Cards)
-    .FirstOrDefaultAsync(b => b.UserId == userId && b.Id == id);
+  async public Task<Board?> Get(int id)
+  {
+    var board = await todoContext.Boards
+      .Include(b => b.Columns)
+      .ThenInclude(c => c.Cards)
+      .FirstOrDefaultAsync(b => b.Id == id);
 
-  public Task<Board?> Get(int id) => todoContext.Boards
-    .Include(b => b.Columns)
-    .ThenInclude(c => c.Cards)
-    .FirstOrDefaultAsync(b => b.Id == id);
+    if (board is TeamBoard)
+      await todoContext
+        .Entry((TeamBoard)board)
+        .Reference(b => b.Team)
+        .LoadAsync();
+
+    return board;
+  }
 
   async public Task Create(Board board)
   {
