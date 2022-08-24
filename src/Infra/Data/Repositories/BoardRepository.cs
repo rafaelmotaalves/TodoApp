@@ -21,11 +21,17 @@ public class BoardRepository : IBoardRepository
       .ThenInclude(c => c.Cards)
       .FirstOrDefaultAsync(b => b.Id == id);
 
-    if (board is TeamBoard)
+    if (board is TeamBoard) {
+      var teamBoard = (TeamBoard)board;
       await todoContext
-        .Entry((TeamBoard)board)
+        .Entry(teamBoard)
         .Reference(b => b.Team)
         .LoadAsync();
+      await todoContext
+        .Entry(teamBoard.Team)
+        .Collection(t => t.Members)
+        .LoadAsync();
+    }
 
     return board;
   }

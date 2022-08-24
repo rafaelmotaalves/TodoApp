@@ -2,9 +2,9 @@ namespace Api.Controllers.Dtos
 {
     using Core.Team;
 
-    public class AddMemberDto
+    public class TeamUserDto
     {
-        public string UserId { get; set; }
+        public UserDto User { get; set; }
 
         public Permission Permission { get; set; }
     }

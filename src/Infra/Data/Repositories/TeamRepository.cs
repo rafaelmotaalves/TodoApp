@@ -23,6 +23,7 @@ namespace Infra.Data.Repositories
 
     public Task<Team?> Get(string id) => _todoContext.Teams
         .Include(t => t.Members)
+        .ThenInclude(tu => tu.User)
         .Include(t => t.Owner)
         .Include(t => t.Boards)
         .FirstOrDefaultAsync(t => t.Id == id);

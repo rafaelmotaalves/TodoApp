@@ -7,6 +7,8 @@ namespace Core.Team
     public string TeamId { get; set; }
     public Team Team { get; set; }
 
-    public override bool IsOwner(string userId) => Team != null && Team.IsMember(userId);
+    public override bool CanWrite(string userId) => Team != null && Team.CanWrite(userId);
+
+    public override bool CanRead(string userId) => Team != null && Team.IsMember(userId);
   }
 }

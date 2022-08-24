@@ -60,7 +60,7 @@ public class BoardService : IBoardService
   async public Task<Board> GetBoard(string userId, int boardId)
   {
     var board = await boardRepository.Get(boardId);
-    if (board is null || !board.IsOwner(userId))
+    if (board is null || !board.CanRead(userId))
       throw new EntityNotFoundException();
     return board;
   }

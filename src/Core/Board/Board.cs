@@ -11,11 +11,13 @@ abstract public class Board
   public List<Column> Columns { get; set; } = new List<Column>();
 
 
-  public abstract bool IsOwner(string ownerId);
+  public abstract bool CanWrite(string userId);
+
+  public abstract bool CanRead(string userId);
 
   public void AddColumn(string ownerId, Column column)
   {
-    if (!IsOwner(ownerId))
+    if (!CanWrite(ownerId))
       throw new UnauthorizedException();
 
     if (Columns.Any(c => c.Name.Equals(column.Name)))
@@ -26,7 +28,7 @@ abstract public class Board
 
   public void AddCard(string ownerId, int columnId, Card card)
   {
-    if (!IsOwner(ownerId))
+    if (!CanWrite(ownerId))
       throw new UnauthorizedException();
     
     var column = Columns.FirstOrDefault(c => c.Id == columnId);
@@ -38,7 +40,7 @@ abstract public class Board
 
   public void MoveCard(string ownerId, int columnId, int newColumnId, int cardId)
   {
-    if (!IsOwner(ownerId))
+    if (!CanWrite(ownerId))
       throw new UnauthorizedException();
     
     if (columnId == newColumnId)

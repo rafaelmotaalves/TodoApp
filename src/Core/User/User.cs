@@ -14,7 +14,6 @@ namespace Core.User
         [InverseProperty("Owner")]
         public List<Team> OwnedTeams { get; set; }
 
-        [InverseProperty("Members")]
-        public List<Team> MemberTeams { get; set; }
+        public List<TeamUser> MemberTeams { get; set; }
     }
 }

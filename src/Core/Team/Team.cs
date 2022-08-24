@@ -1,6 +1,5 @@
 namespace Core.Team
 {
-  using Core.Board;
   using Core.Exceptions;
   using Core.User;
   using System.ComponentModel.DataAnnotations.Schema;
@@ -12,9 +11,7 @@ namespace Core.Team
 
     public string Name { get; set; }
 
-    [InverseProperty("MemberTeams")]
-    public List<User> Members { get; set; } = new List<User>();
-
+    public List<TeamUser> Members { get; set; } = new List<TeamUser>();
 
     [InverseProperty("OwnedTeams")]
     [ForeignKey("OwnerId")]
@@ -24,28 +21,31 @@ namespace Core.Team
 
     public List<TeamBoard> Boards { get; set; } = new List<TeamBoard>();
 
-    public void AddMember(string userId, User user)
+    public void AddMember(string userId, User user,  Permission permission)
     {
-      if (OwnerId != userId)
+      if (!IsOwner(userId))
         throw new UnauthorizedException();
 
       if (IsMember(user.Id))
         return;
 
-      Members.Add(user);
+      var teamUser = new TeamUser { Permission = permission, User = user};
+      Members.Add(teamUser);
     }
 
     public void AddBoard(string userId, TeamBoard teamBoard)
     {
-      if (!IsMember(userId))
+      if (!CanWrite(userId))
         throw new UnauthorizedException();
 
       Boards.Add(teamBoard);
     }
 
-    public bool IsMember(string userId)
-    {
-      return OwnerId == userId || Members.Any(u => u.Id == userId);
-    }
+    public bool CanWrite(string userId) => 
+      IsOwner(userId)|| Members.Any(u => u.UserId == userId && u.Permission == Permission.ReadWrite);
+
+    public bool IsMember(string userId) => IsOwner(userId) || Members.Any(u => u.UserId == userId);
+
+    private bool IsOwner(string userId) =>  OwnerId == userId;
   }
 }

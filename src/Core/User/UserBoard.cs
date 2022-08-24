@@ -8,6 +8,8 @@ namespace Core.User
 
     public User User { get; set; }
 
-    override public bool IsOwner(string ownerId) => this.UserId == ownerId;
+    override public bool CanWrite(string userId) => this.UserId == userId;
+
+    public override bool CanRead(string userId)  => CanWrite(userId);
   }
 }

@@ -1,13 +1,12 @@
 namespace Core.Team
 {
   using Core.Exceptions;
-  using Core.Board;
   using Core.User;
 
   public interface ITeamService
   {
     public Task Create(string ownerId, string name);
-    public Task AddMember(string teamId, string ownerId, string memberId);
+    public Task AddMember(string teamId, string ownerId, string memberId, Permission permission);
 
     public Task AddBoard(string teamId, string userId, string boardName);
   }
@@ -30,7 +29,7 @@ namespace Core.Team
       await _teamRepository.Create(team);
     }
 
-    async public Task AddMember(string teamId, string ownerId, string memberId)
+    async public Task AddMember(string teamId, string ownerId, string memberId, Permission permission)
     {
       var team = await _teamRepository.Get(teamId);
       if (team is null)
@@ -40,7 +39,7 @@ namespace Core.Team
       if (newMember is null)
         throw new EntityNotFoundException();
 
-      team.AddMember(ownerId, newMember);
+      team.AddMember(ownerId, newMember, permission);
       await _teamRepository.Update(team);
     }
 

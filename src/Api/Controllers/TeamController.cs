@@ -57,7 +57,7 @@ namespace Api.Controllers
       ActionResult actionResult;
 
       try {
-        await _teamService.AddMember(teamId, userId, addMemberDto.userId);
+        await _teamService.AddMember(teamId, userId, addMemberDto.UserId, addMemberDto.Permission);
         actionResult = NoContent();
       } catch (EntityNotFoundException) {
         actionResult = NotFound();

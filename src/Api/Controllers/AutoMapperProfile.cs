@@ -18,6 +18,7 @@ namespace Api.Controllers
             CreateMap<Card, CardDto>();
             CreateMap<Team, TeamDto>();
             CreateMap<User, UserDto>();
+            CreateMap<TeamUser, TeamUserDto>();
         }
     }
 }
