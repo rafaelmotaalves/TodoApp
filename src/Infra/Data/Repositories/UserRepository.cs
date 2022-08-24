@@ -14,5 +14,7 @@ namespace Infra.Data.Repositories
     }
 
     public Task<User?> Get(string id) => _todoContext.Users.FirstOrDefaultAsync(u => u.Id == id);
+
+    public Task<List<User>> GetAll() => _todoContext.Users.ToListAsync();
   }
 }

@@ -7,6 +7,8 @@ namespace Core.User
 {
     public interface IUserRepository
     {
+        public Task<List<User>> GetAll();
+
         public Task<User?> Get(string id);
     }
 }
