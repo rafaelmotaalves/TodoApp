@@ -1,4 +1,6 @@
-namespace Core.Entities;
+namespace Core.Board;
+
+using Core.Exceptions;
 
 abstract public class Board
 {

@@ -1,7 +1,9 @@
-namespace Core.Entities
+namespace Core.Team
 {
+  using Core.Board;
+  using Core.Exceptions;
+  using Core.User;
   using System.ComponentModel.DataAnnotations.Schema;
-
 
   public class Team
   {

@@ -1,4 +1,4 @@
-using Core.Entities;
+using Core.User;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infra.Data.Repositories

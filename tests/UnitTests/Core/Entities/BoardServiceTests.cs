@@ -1,5 +1,5 @@
 using Moq;
-using Core.Entities;
+using Core.Board;
 
 namespace UnitTests.Core.Entities;
 

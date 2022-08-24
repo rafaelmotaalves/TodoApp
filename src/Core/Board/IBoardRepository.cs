@@ -1,4 +1,5 @@
-namespace Core.Entities;
+namespace Core.Board;
+using Core.User;
 
 public interface IBoardRepository
 {

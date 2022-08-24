@@ -1,4 +1,4 @@
-namespace Core.Entities;
+namespace Core.Board;
 
 public class Column
 {

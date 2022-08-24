@@ -1,5 +1,5 @@
 using Api.Controllers.Dtos;
-using Core.Entities;
+using Core.User;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;

@@ -1,5 +1,7 @@
 using Api.Controllers;
-using Core.Entities;
+using Core.Board;
+using Core.User;
+using Core.Exceptions;
 using Api.Controllers.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;

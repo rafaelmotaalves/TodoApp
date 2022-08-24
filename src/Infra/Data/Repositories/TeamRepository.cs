@@ -1,7 +1,8 @@
-using Core.Entities;
-using Microsoft.EntityFrameworkCore;
 namespace Infra.Data.Repositories
 {
+  using Core.Team;
+  using Microsoft.EntityFrameworkCore;
+
   public class TeamRepository : ITeamRepository
   {
 

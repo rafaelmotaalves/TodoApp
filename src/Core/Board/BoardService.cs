@@ -1,5 +1,7 @@
-namespace Core.Entities;
+namespace Core.Board;
 
+using Core.Exceptions;
+using Core.User;
 
 public interface IBoardService
 {

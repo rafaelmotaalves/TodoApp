@@ -1,5 +1,9 @@
-namespace Core.Entities
+namespace Core.Team
 {
+  using Core.Exceptions;
+  using Core.Board;
+  using Core.User;
+
   public interface ITeamService
   {
     public Task Create(string ownerId, string name);

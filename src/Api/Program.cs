@@ -1,6 +1,5 @@
 using Infra.Data;
 using Infra.Data.Repositories;
-using Core.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -9,6 +8,9 @@ using Microsoft.OpenApi.Models;
 using System.Security.Claims;
 using System.Text;
 
+using Core.User;
+using Core.Team;
+using Core.Board;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;

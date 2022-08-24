@@ -1,8 +1,10 @@
+namespace Infra.Data;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Core.Entities;
-
-namespace Infra.Data;
+using Core.User;
+using Core.Board;
+using Core.Team;
 
 public class TodoContext :  IdentityDbContext<User>
 {

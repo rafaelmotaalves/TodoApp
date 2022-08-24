@@ -1,5 +1,8 @@
 using AutoMapper;
-using Core.Entities;
+
+using Core.User;
+using Core.Board;
+using Core.Team;
 using Api.Controllers.Dtos;
 
 namespace Api.Controllers

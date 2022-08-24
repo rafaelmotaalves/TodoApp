@@ -1,5 +1,6 @@
 using Api.Controllers.Dtos;
-using Core.Entities;
+using Core.Exceptions;
+using Core.Team;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using AutoMapper;

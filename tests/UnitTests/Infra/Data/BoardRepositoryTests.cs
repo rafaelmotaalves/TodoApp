@@ -1,6 +1,7 @@
 using Infra.Data.Repositories;
 using UnitTests.Util;
-using Core.Entities;
+using Core.Board;
+using Core.User;
 
 namespace UnitTests.Core.Entities;
 

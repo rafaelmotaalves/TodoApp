@@ -1,4 +1,6 @@
-using Core.Entities;
+using Core.Board;
+using Core.User;
+using Core.Team;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infra.Data.Repositories;

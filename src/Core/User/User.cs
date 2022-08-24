@@ -1,8 +1,9 @@
-using Microsoft.AspNetCore.Identity;
-using System.ComponentModel.DataAnnotations.Schema ;
-
-namespace Core.Entities
+namespace Core.User
 {
+    using Microsoft.AspNetCore.Identity;
+    using System.ComponentModel.DataAnnotations.Schema;
+    using Core.Board;
+    using Core.Team;
 
     public class User : IdentityUser
     {

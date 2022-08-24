@@ -1,5 +1,7 @@
-namespace Core.Entities
+namespace Core.User
 {
+  using Core.Board;
+
   public class UserBoard : Board
   {
     public String UserId { get; set; }

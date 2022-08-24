@@ -1,5 +1,7 @@
-namespace Core.Entities
+namespace Core.Team
 {
+  using Core.Board;
+
   public class TeamBoard : Board
   {
     public string TeamId { get; set; }
